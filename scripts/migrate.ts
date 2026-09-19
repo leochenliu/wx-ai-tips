@@ -1,6 +1,6 @@
 // scripts/migrate.ts — 应用 SQL 迁移到 Postgres
 // 用法：pnpm db:migrate
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { Client } from "pg";
 
@@ -43,7 +43,7 @@ async function main() {
 
   // 读取所有迁移文件（数字前缀排序）
   const files = readdirSync(MIGRATIONS_DIR)
-    .filter((f) => f.endsWith(".sql"))
+    .filter((f) => f.endsWith(".sql") && !f.includes(".mysql.sql"))
     .sort();
 
   let applied = 0;

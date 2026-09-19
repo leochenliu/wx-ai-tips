@@ -1,21 +1,23 @@
 version: "3.9"
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: wx-ai-tips-pg
+  mysql:
+    image: mysql:8.0
+    container_name: wx-ai-tips-mysql
     restart: unless-stopped
     environment:
-      POSTGRES_USER: app_user
-      POSTGRES_PASSWORD: local_dev_password
-      POSTGRES_DB: wx_ai_tips
+      MYSQL_ROOT_PASSWORD: local_dev_root
+      MYSQL_DATABASE: wx_ai_tips
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: local_dev_password
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - pg_data:/var/lib/postgresql/data
-      - ./db/migrations:/docker-entrypoint-initdb.d:ro
+      - mysql_data:/var/lib/mysql
+      # 首次启动（数据目录为空）时，MySQL 容器会自动执行该初始化脚本建表
+      - ./db/migrations/0001_init.mysql.sql:/docker-entrypoint-initdb.d/0001_init.mysql.sql:ro
 
   minio:
-    image: minio/minio:latest
+    image: quay.io/minio/minio:latest
     container_name: wx-ai-tips-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
@@ -29,5 +31,5 @@ services:
       - minio_data:/data
 
 volumes:
-  pg_data:
+  mysql_data:
   minio_data:
