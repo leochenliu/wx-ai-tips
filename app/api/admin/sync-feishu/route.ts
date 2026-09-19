@@ -15,13 +15,10 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import * as lark from "@larksuiteoapi/node-sdk";
-import { query, pool } from "@/lib/db";
+import { pool } from "@/lib/db";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
-
-// 飞书字段 → MySQL 列 的映射常量
-const FIELD_BODY = "body"; // 飞书字段 body → MySQL content_markdown
 
 interface FeishuBitableRecord {
   record_id: string;
