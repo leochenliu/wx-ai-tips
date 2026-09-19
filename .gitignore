@@ -57,6 +57,9 @@ backups/
 # WorkBuddy (project metadata, not source)
 .workbuddy/
 
+# 本机开发备注（个人差异）
+.gitignore.local
+
 # Misc
 .cache/
 .parcel-cache/
