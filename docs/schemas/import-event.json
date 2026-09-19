@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wx-ai-tips.example.com/schemas/import-event.json",
+  "title": "ImportEvent",
+  "description": "不可变导入事件",
+  "type": "object",
+  "required": ["id", "source", "status", "startedAt"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "source": {
+      "type": "string",
+      "enum": ["feishu"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["running", "succeeded", "failed"]
+    },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "finishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "nullable": true
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "added": { "type": "integer", "minimum": 0 },
+        "updated": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "articleSlug": { "type": "string" },
+          "message": { "type": "string" },
+          "stack": { "type": "string" }
+        }
+      }
+    }
+  }
+}

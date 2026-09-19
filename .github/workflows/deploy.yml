@@ -1,0 +1,43 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "目标环境"
+        required: true
+        default: preview
+        type: choice
+        options:
+          - preview
+          - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment || 'preview' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to CloudBase
+        env:
+          CLOUDBASE_SECRET_ID: ${{ secrets.CLOUDBASE_SECRET_ID }}
+          CLOUDBASE_SECRET_KEY: ${{ secrets.CLOUDBASE_SECRET_KEY }}
+          CLOUDBASE_ENV_ID: ${{ secrets.CLOUDBASE_ENV_ID }}
+        run: |
+          # 仅 production 需要人工确认（GitHub environment protection rule）
+          if [ "${{ github.event.inputs.environment }}" = "production" ]; then
+            echo "Deploying to PRODUCTION. Confirm in GitHub environment protection."
+          fi
+          npm install -g @cloudbase/cli
+          tcb framework deploy \
+            --mode=${{ github.event.inputs.environment || 'preview' }} \
+            --env-id=$CLOUDBASE_ENV_ID
+
+      - name: Smoke test
+        if: github.event.inputs.environment == 'production'
+        run: |
+          curl -fsS https://wx-ai-tips.example.com/api/articles?pageSize=1 | jq .

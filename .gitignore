@@ -1,0 +1,64 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Local env
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Typescript
+*.tsbuildinfo
+
+# CloudBase
+.cloudbase/
+.tcb/
+
+# Backup files (never commit real data)
+backups/
+*.sql.gz
+*.dump
+
+# WorkBuddy (project metadata, not source)
+.workbuddy/
+
+# Misc
+.cache/
+.parcel-cache/
+.turbo/
+.next/trace

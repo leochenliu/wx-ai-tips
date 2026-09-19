@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wx-ai-tips.example.com/schemas/screenshot.json",
+  "title": "Screenshot",
+  "type": "object",
+  "required": ["id", "articleId", "storageKey", "mimeType"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "articleId": { "type": "string", "format": "uuid" },
+    "storageKey": {
+      "type": "string",
+      "description": "存储系统内的 key；URL 由基础设施层解析"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "派生字段；由 storageKey 解析"
+    },
+    "mimeType": {
+      "type": "string",
+      "enum": ["image/png", "image/jpeg", "image/webp", "image/gif"]
+    },
+    "width": { "type": "integer", "minimum": 1 },
+    "height": { "type": "integer", "minimum": 1 },
+    "altText": { "type": "string", "maxLength": 200 },
+    "ocrText": { "type": "string", "description": "v1.1 可选" },
+    "sortOrder": { "type": "integer", "minimum": 0 },
+    "containsPii": {
+      "type": "boolean",
+      "default": false,
+      "description": "截图含敏感信息时为 true；前端按规则处理"
+    },
+    "createdAt": { "type": "string", "format": "date-time" }
+  }
+}
