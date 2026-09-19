@@ -48,8 +48,24 @@ pnpm dev
 
 ## 部署
 
-- **预览**：PR merge 前自动部署到 CloudBase 预览环境
-- **生产**：merge 到 `main` 后由 GitHub Actions 自动部署（需手动确认）
+通过 GitHub Actions 自动部署到 CloudBase（腾讯云开发）。
+
+### 前置：配置密钥
+1. **GitHub Secrets**（仓库 `Settings → Secrets and variables → Actions`）：
+   - `CLOUDBASE_SECRET_ID` / `CLOUDBASE_SECRET_KEY`：腾讯云 API 密钥（CAM → API 密钥管理）
+   - `CLOUDBASE_ENV_ID`：CloudBase 环境 ID
+   - `SITE_DOMAIN`（可选）：生产域名，用于部署后冒烟测试
+2. **CloudBase 环境变量**（控制台 → 环境 → 环境变量，**不要**放进 GitHub Secret）：
+   - `MYSQLHOST` / `MYSQLPORT` / `MYSQLDATABASE` / `MYSQLUSER` / `MYSQLPASSWORD`
+   - 部署后的 Next.js 云函数会在运行时继承这些变量来连 MySQL。
+
+### 触发
+- 推送到 `main` → 自动部署 `preview`
+- `Actions → Deploy → Run workflow` → 选 `preview` / `production`（production 需 environment 保护规则人工确认）
+
+### 注意事项
+- CloudBase **FREE 套餐**云函数限制 **3s 超时 / 256MB 内存**。Next.js SSR + 远程 MySQL 查询在冷启动时可能触及上限；若频繁超时，建议改用**云托管（CloudRun）+ `output: "standalone"`**（独立容器，可配更大内存/超时）。
+- `cloudbaserc.json` 使用 `@cloudbase/framework-plugin-next`，`envId` 由 `--env-id` 注入。
 
 详见 `docs/ENVIRONMENTS.md`
 

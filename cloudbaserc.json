@@ -1,0 +1,18 @@
+{
+  "version": "2.0",
+  "envId": "{{envId}}",
+  "framework": {
+    "name": "wx-ai-tips",
+    "plugins": {
+      "client": {
+        "use": "@cloudbase/framework-plugin-next",
+        "inputs": {
+          "entry": "./",
+          "path": "/",
+          "name": "wx-ai-tips",
+          "buildCommand": "npm run build"
+        }
+      }
+    }
+  }
+}

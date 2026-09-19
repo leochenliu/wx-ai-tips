@@ -22,7 +22,8 @@ jobs:
           cache: pnpm
 
       - name: Install
-        run: pnpm install --frozen-lockfile
+        # 非 frozen：本地 pnpm-lock.yaml 尚未包含 mysql2，待用户本地 pnpm install 重新生成
+        run: pnpm install
 
       - name: Lint
         run: pnpm lint

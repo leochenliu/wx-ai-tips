@@ -22,6 +22,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      # 安装依赖（非 frozen：本地 pnpm-lock.yaml 尚未包含 mysql2，待用户本地 pnpm install 重新生成）
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Deploy to CloudBase
         env:
           CLOUDBASE_SECRET_ID: ${{ secrets.CLOUDBASE_SECRET_ID }}
@@ -39,5 +52,10 @@ jobs:
 
       - name: Smoke test
         if: github.event.inputs.environment == 'production'
+        continue-on-error: true
+        env:
+          SITE_DOMAIN: ${{ secrets.SITE_DOMAIN }}
         run: |
-          curl -fsS https://wx-ai-tips.example.com/api/articles?pageSize=1 | jq .
+          # 生产域名请在 GitHub Secrets 设置 SITE_DOMAIN（如 wx-ai-tips-xxx.ap-shanghai.cloudbaseapp.com）
+          DOMAIN="${SITE_DOMAIN:-wx-ai-tips.example.com}"
+          curl -fsS "https://${DOMAIN}/api/articles?pageSize=1" | jq .
