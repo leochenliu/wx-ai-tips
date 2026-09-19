@@ -34,6 +34,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "@cloudbase/js-sdk": "^2.5.0",
+    "@larksuiteoapi/node-sdk": "^1.74.0",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "mysql2": "^3.11.0",
     "pg": "^8.13.0",
