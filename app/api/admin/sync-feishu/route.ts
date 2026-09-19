@@ -38,6 +38,7 @@ interface SyncStats {
 
 export async function POST(req: Request) {
   const t0 = Date.now();
+  try {
 
   // 1) 鉴权
   const auth = req.headers.get("authorization") ?? "";
@@ -230,6 +231,13 @@ export async function POST(req: Request) {
 
   stats.duration_ms = Date.now() - t0;
   return NextResponse.json({ ok: true, ...stats });
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : String(e);
+    return NextResponse.json(
+      { ok: false, error: "internal_error", detail: message, duration_ms: Date.now() - t0 },
+      { status: 500 },
+    );
+  }
 }
 
 // 把飞书 datetime 字段（"YYYY-MM-DD HH:mm:ss" 或毫秒时间戳）转成 JS Date
